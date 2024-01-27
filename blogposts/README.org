@@ -1,0 +1,33 @@
+#+title: Readme
+
+* Task
+- convert given folder of blog post files into a collection of Posts
+
+#+begin_src md
+Title: Hello, TDD world!
+Description: First post on our wonderful blog
+Tags: tdd, go
+---
+Hello world!
+
+The body of posts starts after the `---`
+#+end_src
+
+Expected Data
+#+begin_src go :results output :imports "fmt"
+type Post struct {
+    Title, Description, Body string
+	Tags []string
+}
+#+end_src
+
+* Consumer
+- take a filepath
+- get the posts
+
+* Tests
+** Read files from directory
+*** Read a file
+*** Read directory
+*** Read filesystem tree
+** Extract Title

@@ -1,0 +1,15 @@
+#+title: Readme
+
+
+Parameters:
+x2_i, y2_i for i = 0..2
+color parameters
+
+- every clock has a centre of (150, 150)
+- the hour hand is 50 long
+- the minute hand is 80 long
+- the second hand is 90 long
+
+- svg has point (0,0) at the top left
+  - goes right with x
+  - goes down with y
