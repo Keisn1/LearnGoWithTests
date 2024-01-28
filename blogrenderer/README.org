@@ -1,0 +1,31 @@
+#+title: Readme
+* View post
+- renders a specific post
+  - the @Body field in @Post is a string containing markdown that should be converted to HTML
+** Tests
+- post as input, html as output
+  - need to unmarshall html to test if it was written?
+  - or test if the desired string is inside the html
+
+* Index
+- lists all of the posts, with hyperlinks to view the specific post
+** Tests
+- same question, how would you test that
+* Design
+- accepts an io.Writer
+  - can be os.Stdout, a fileWriter, a HTMLWriter
+  -
+* html snippets
+#+begin_src html
+<!-- <html lang="en"> -->
+<!--   <head> -->
+<!--     <meta charset="UTF-8" /> -->
+<!--     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> -->
+<!--     <meta content="text/html; charset=utf-8" /> -->
+<!--     <link rel="stylesheet" href="styles.css" /> -->
+<!--     <title>{{.Title}}</title> -->
+<!--   </head> -->
+<!--   <body> -->
+<!--   </body> -->
+<!-- </html> -->
+#+end_src
