@@ -1,29 +1,35 @@
 package arrays
 
 func Sum(arr []int) int {
-	var sum int
-	for _, nbr := range arr {
-		sum += nbr
-	}
-	return sum
+	plus := func(a, b int) int { return a + b }
+	return Reduce(arr, plus, 0)
 }
 
-func SumAll(nbrSlices [][]int) []int {
-	var sums []int
-	for _, nbrSlice := range nbrSlices {
-		sums = append(sums, Sum(nbrSlice))
+func Reduce[A, B any](arr []A, accumulator func(B, A) B, initVal B) B {
+	var res = initVal
+	for _, x := range arr {
+		res = accumulator(res, x)
 	}
-	return sums
+	return res
 }
 
-func SumAllTails(nbrSlices [][]int) []int {
-	var sumsTail []int
-	for _, nbrSlice := range nbrSlices {
-		if len(nbrSlice) == 0 {
-			sumsTail = append(sumsTail, 0)
-			continue
+func SumAll(nbrSlices ...[]int) []int {
+	sums := func(a, b []int) []int {
+		a = append(a, Sum(b))
+		return a
+	}
+	return Reduce(nbrSlices, sums, []int{})
+}
+
+func SumAllTails(nbrSlices ...[]int) []int {
+	sumsTails := func(acc, b []int) []int {
+		if len(b) == 0 {
+			acc = append(acc, 0)
+		} else {
+			return append(acc, Sum(b[1:]))
 		}
-		sumsTail = append(sumsTail, Sum(nbrSlice[1:]))
+		return acc
 	}
-	return sumsTail
+
+	return Reduce(nbrSlices, sumsTails, []int{})
 }

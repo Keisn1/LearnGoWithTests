@@ -30,7 +30,7 @@ func TestSumAll(t *testing.T) {
 		{5, 6, 7},
 	}
 
-	got := SumAll(nbrSlices)
+	got := SumAll(nbrSlices...)
 	want := []int{15, 18}
 	assertEqualSlices(t, got, want)
 }
@@ -42,7 +42,7 @@ func TestSumAllTails(t *testing.T) {
 			{5, 6, 7},
 		}
 
-		got := SumAllTails(nbrSlices)
+		got := SumAllTails(nbrSlices...)
 		want := []int{14, 13}
 		assertEqualSlices(t, got, want)
 	})
@@ -67,8 +67,84 @@ func TestSumAllTails(t *testing.T) {
 		}
 
 		for _, tc := range testCases {
-			got := SumAllTails(tc.input)
+			got := SumAllTails(tc.input...)
 			assertEqualSlices(t, got, tc.want)
 		}
 	})
+}
+
+func TestReduce(t *testing.T) {
+	t.Run("multiplication of all elements", func(t *testing.T) {
+		multiply := func(x, y int) int {
+			return x * y
+		}
+
+		AssertEqual(t, Reduce([]int{1, 2, 3}, multiply, 1), 6)
+	})
+
+	t.Run("concatenate strings", func(t *testing.T) {
+		concatenate := func(x, y string) string {
+			return x + y
+		}
+
+		AssertEqual(t, Reduce([]string{"a", "b", "c"}, concatenate, ""), "abc")
+	})
+}
+
+func AssertEqual[T comparable](t *testing.T, a, b T) {
+	t.Helper()
+	if a != b {
+		t.Errorf("a = %v not equal b = %v", a, b)
+	}
+}
+
+func AssertNotEqual[T comparable](t *testing.T, a, b T) {
+	t.Helper()
+	if a == b {
+		t.Errorf("a = %v equal b = %v", a, b)
+	}
+}
+
+func AssertTrue(t *testing.T, got bool) {
+	t.Helper()
+	if !got {
+		t.Errorf("got is false")
+	}
+}
+
+func TestBadBank(t *testing.T) {
+	transactions := []Transaction{
+		{
+			From: "Chris",
+			To:   "Riya",
+			Sum:  100,
+		},
+		{
+			From: "Adil",
+			To:   "Chris",
+			Sum:  25,
+		},
+	}
+	AssertEqual(t, BalanceFor(transactions, "Riya"), 100)
+	AssertEqual(t, BalanceFor(transactions, "Chris"), -75)
+	AssertEqual(t, BalanceFor(transactions, "Adil"), -25)
+}
+
+func BalanceFor(txs []Transaction, name string) float64 {
+	sumTxs := func(currBal float64, t2 Transaction) float64 {
+		if t2.From == name {
+			return currBal - t2.Sum
+		} else if t2.To == name {
+			return currBal + t2.Sum
+		}
+		return currBal
+	}
+
+	return Reduce(txs, sumTxs, 0)
+}
+
+type Transaction struct {
+	From string
+	To   string
+	Sum  float64
 }
