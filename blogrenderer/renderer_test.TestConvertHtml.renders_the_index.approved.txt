@@ -22,19 +22,11 @@
       </div>
     </nav>
     <main>
-<h1>hello world</h1>
-
-<p>This is a description</p>
-
-Tags:
-<ul>
-  <li>go</li>
-  <li>tdd</li>
-</ul>
-
-<div class="postBody"><p>This is a post</p>
-</div>
-
+<ol>
+  <li><a href="/hello-world">hello world</a></li>
+  <li><a href="/hello-mars">hello mars</a></li>
+  <li><a href="/hello-jupiter">hello jupiter</a></li>
+</ol>
 </main>
 <footer>
   <ul>

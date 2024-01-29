@@ -1,26 +1,29 @@
 package arrays
 
-func Sum(arr []int) (res int) {
+func Sum(arr []int) int {
+	var sum int
 	for _, nbr := range arr {
-		res += nbr
+		sum += nbr
 	}
-	return
+	return sum
 }
 
-func SumAll(nbrSlices [][]int) (res []int) {
+func SumAll(nbrSlices [][]int) []int {
+	var sums []int
 	for _, nbrSlice := range nbrSlices {
-		res = append(res, Sum(nbrSlice))
+		sums = append(sums, Sum(nbrSlice))
 	}
-	return
+	return sums
 }
 
-func SumAllTails(nbrSlices [][]int) (res []int) {
+func SumAllTails(nbrSlices [][]int) []int {
+	var sumsTail []int
 	for _, nbrSlice := range nbrSlices {
 		if len(nbrSlice) == 0 {
-			res = append(res, 0)
+			sumsTail = append(sumsTail, 0)
 			continue
 		}
-		res = append(res, Sum(nbrSlice[1:]))
+		sumsTail = append(sumsTail, Sum(nbrSlice[1:]))
 	}
-	return
+	return sumsTail
 }

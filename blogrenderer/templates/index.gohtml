@@ -1,0 +1,5 @@
+{{template "top" .}}
+<ol>{{range .}}
+  <li><a href="/{{.Slug}}">{{.Title}}</a></li>{{end}}
+</ol>
+{{template "bottom" .}}

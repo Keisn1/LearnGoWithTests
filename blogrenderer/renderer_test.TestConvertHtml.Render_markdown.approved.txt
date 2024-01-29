@@ -22,17 +22,27 @@
       </div>
     </nav>
     <main>
-<h1>hello world</h1>
+<h1>hello jupiter</h1>
 
-<p>This is a description</p>
+<p>This is a description of jupiter</p>
 
 Tags:
 <ul>
-  <li>go</li>
-  <li>tdd</li>
+  <li>go jupiter</li>
+  <li>tdd jupiter</li>
 </ul>
 
-<div class="postBody"><p>This is a post</p>
+<div class="postBody"><h1 id="index">Index</h1>
+
+<ul>
+<li>lists all of the posts, with hyperlinks to view the specific post</li>
+</ul>
+
+<h2 id="tests">Tests</h2>
+
+<ul>
+<li>same question, how would you test that</li>
+</ul>
 </div>
 
 </main>

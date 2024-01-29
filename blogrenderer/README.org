@@ -6,7 +6,6 @@
 - post as input, html as output
   - need to unmarshall html to test if it was written?
   - or test if the desired string is inside the html
-
 * Index
 - lists all of the posts, with hyperlinks to view the specific post
 ** Tests

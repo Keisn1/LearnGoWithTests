@@ -53,3 +53,7 @@ func readTagsLine(tagsLine string) []string {
 	}
 	return tags
 }
+
+func (p Post) Slug() string {
+	return strings.ToLower(strings.ReplaceAll(p.Title, " ", "-"))
+}
