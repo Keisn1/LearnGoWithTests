@@ -2,6 +2,7 @@ package arrays
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -113,29 +114,58 @@ func AssertTrue(t *testing.T, got bool) {
 }
 
 func TestBadBank(t *testing.T) {
-	transactions := []Transaction{
-		{
-			From: "Chris",
-			To:   "Riya",
-			Sum:  100,
-		},
-		{
-			From: "Adil",
-			To:   "Chris",
-			Sum:  25,
-		},
+	var (
+		riya  = Account{Name: "Riya", Balance: 100}
+		chris = Account{Name: "Chris", Balance: 75}
+		adil  = Account{Name: "Adil", Balance: 200}
+
+		transactions = []Transaction{
+			NewTransaction(chris, riya, 100),
+			NewTransaction(adil, chris, 25),
+		}
+	)
+
+	newBalanceFor := func(account Account) float64 {
+		return NewBalanceFor(account, transactions).Balance
 	}
-	AssertEqual(t, BalanceFor(transactions, "Riya"), 100)
-	AssertEqual(t, BalanceFor(transactions, "Chris"), -75)
-	AssertEqual(t, BalanceFor(transactions, "Adil"), -25)
+
+	AssertEqual(t, newBalanceFor(riya), 200)
+	AssertEqual(t, newBalanceFor(chris), 0)
+	AssertEqual(t, newBalanceFor(adil), 175)
+}
+
+func NewBalanceFor(account Account, txs []Transaction) Account {
+	sumTxs := func(account Account, tx Transaction) Account {
+		if tx.From == account.Name {
+			account.Balance -= tx.Amount
+		} else if tx.To == account.Name {
+			account.Balance += tx.Amount
+		}
+		return account
+	}
+
+	return Reduce(txs, sumTxs, account)
+}
+
+type Account struct {
+	Name    string
+	Balance float64
+}
+
+func NewTransaction(from, to Account, amount float64) Transaction {
+	return Transaction{
+		From:   from.Name,
+		To:     to.Name,
+		Amount: amount,
+	}
 }
 
 func BalanceFor(txs []Transaction, name string) float64 {
 	sumTxs := func(currBal float64, t2 Transaction) float64 {
 		if t2.From == name {
-			return currBal - t2.Sum
+			return currBal - t2.Amount
 		} else if t2.To == name {
-			return currBal + t2.Sum
+			return currBal + t2.Amount
 		}
 		return currBal
 	}
@@ -144,7 +174,48 @@ func BalanceFor(txs []Transaction, name string) float64 {
 }
 
 type Transaction struct {
-	From string
-	To   string
-	Sum  float64
+	From   string
+	To     string
+	Amount float64
+}
+
+func TestFind(t *testing.T) {
+	t.Run("find first even number", func(t *testing.T) {
+		numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+		firstEvenNumber, found := Find(numbers, func(x int) bool {
+			return x%2 == 0
+		})
+		AssertTrue(t, found)
+		AssertEqual(t, firstEvenNumber, 2)
+	})
+
+	type Person struct {
+		Name string
+	}
+
+	t.Run("Find the best programmer", func(t *testing.T) {
+		people := []Person{
+			{Name: "Kent Beck"},
+			{Name: "Martin Fowler"},
+			{Name: "Chris James"},
+		}
+
+		king, found := Find(people, func(p Person) bool {
+			return strings.Contains(p.Name, "Chris")
+		})
+
+		AssertTrue(t, found)
+		AssertEqual(t, king, Person{Name: "Chris James"})
+	})
+
+}
+
+func Find[A any](items []A, predicate func(A) bool) (value A, found bool) {
+	for _, v := range items {
+		if predicate(v) {
+			return v, true
+		}
+	}
+	return
 }
